@@ -69,7 +69,7 @@
     <script src="https://js.braintreegateway.com/web/dropin/1.25.0/js/dropin.min.js"></script>
     <script>
         var form = document.querySelector('#payment-form');
-        var client_token = "<?php echo($gateway->ClientToken()->generate()); ?>";
+        var client_token = "<?php echo($gateway->ClientToken()->generate()); ?>"; // 请求接口获得
 
         braintree.dropin.create({
           authorization: client_token,
@@ -93,6 +93,8 @@
 
               // Add the nonce to the form and submit
               document.querySelector('#nonce').value = payload.nonce;
+
+              // 提交表单，实际前后端分离前端自行去写请求
               form.submit();
             });
           });
