@@ -3,6 +3,7 @@ require_once("../includes/braintree_init.php");
 
 $amount = $_POST["amount"];
 $nonce = $_POST["payment_method_nonce"];
+$payload = $_POST["payment_method_payload"];
 
 $result = $gateway->transaction()->sale([
     'amount' => $amount,

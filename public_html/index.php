@@ -41,9 +41,8 @@
         <div class="checkout container">
             <header>
                 <h1>Hi, <br>Let's test a transaction</h1>
-                <p>
-                    Make a test payment with Braintree using PayPal or a card
-                </p>
+                <p>沙箱账号,用这个做信用卡账号才能支付 4111111111111111</p>
+                <p>沙箱账号,Expiration Date: 11/23</p>
             </header>
 
             <form method="post" id="payment-form" action="<?php echo $baseUrl;?>checkout.php">
@@ -61,6 +60,7 @@
                 </section>
 
                 <input id="nonce" name="payment_method_nonce" type="hidden" />
+                <input id="payload" name="payment_method_payload" type="hidden" />
                 <button class="button" type="submit"><span>Test Transaction</span></button>
             </form>
         </div>
@@ -93,8 +93,9 @@
 
               // Add the nonce to the form and submit
               document.querySelector('#nonce').value = payload.nonce;
+              document.querySelector('#payload').value = payload;
 
-              // 提交表单，实际前后端分离前端自行去写请求
+                // 提交表单，实际前后端分离前端自行去写请求
               form.submit();
             });
           });
