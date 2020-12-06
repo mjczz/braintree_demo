@@ -1,10 +1,43 @@
 <?php  require_once("../includes/braintree_init.php"); ?>
 <html>
-<?php require_once("../includes/head.php"); ?>
+<head>
+    <meta charset="UTF-8">
+    <title>BraintreePHPExample</title>
+    <link rel=stylesheet type=text/css href="css/app.css">
+    <link rel=stylesheet type=text/css href="css/overrides.css">
+</head>
 <body>
 
+<header class="main">
+    <div class="container wide">
+        <div class="content slim">
+            <div class="set">
+                <div class="fill">
+                    <a class="pseudoshop" href="/"><strong>INDEX</strong></a>
+                </div>
+
+                <div class="fit">
+                    <a class="braintree" href="https://developers.braintreepayments.com/guides/drop-in" target="_blank">Braintree</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notice-wrapper">
+        <?php if(isset($_SESSION["errors"])) : ?>
+            <div class="show notice error notice-error">
+                <span class="notice-message">
+                    <?php
+                    echo($_SESSION["errors"]);
+                    unset($_SESSION["errors"]);
+                    ?>
+                <span>
+            </div>
+        <?php endif; ?>
+    </div>
+</header>
+
 <?php
-    require_once("../includes/header.php");
     if (isset($_GET["id"])) {
         $transaction = $gateway->transaction()->find($_GET["id"]);
 
