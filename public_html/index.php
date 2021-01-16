@@ -52,6 +52,61 @@
                             <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
                         </div>
                     </label>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                        <span id="help-email" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-phone">Billing phone number</label>
+                        <input type="text" class="form-control" id="billing-phone" placeholder="123-456-7890">
+                        <span id="help-billing-phone" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-phone">Billing phone number</label>
+                        <input type="text" class="form-control" id="billing-phone" placeholder="123-456-7890">
+                        <span id="help-billing-phone" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-given-name">Billing given name</label>
+                        <input type="text" class="form-control" id="billing-given-name" placeholder="First">
+                        <span id="help-billing-given-name" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-surname">Billing surname</label>
+                        <input type="text" class="form-control" id="billing-surname" placeholder="Last">
+                        <span id="help-billing-surname" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-street-address">Billing street address</label>
+                        <input type="text" class="form-control" id="billing-street-address" placeholder="123 Street">
+                        <span id="help-billing-street-address" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-extended-address">Billing extended address</label>
+                        <input type="text" class="form-control" id="billing-extended-address" placeholder="Unit 1">
+                        <span id="help-billing-extended-address" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-locality">Billing locality</label>
+                        <input type="text" class="form-control" id="billing-locality" placeholder="City">
+                        <span id="help-billing-locality" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-region">Billing region</label>
+                        <input type="text" class="form-control" id="billing-region" placeholder="State">
+                        <span id="help-billing-region" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-postal-code">Billing postal code</label>
+                        <input type="text" class="form-control" id="billing-postal-code" placeholder="12345">
+                        <span id="help-billing-postal-code" class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="billing-country-code">Billing country code (Alpha 2)</label>
+                        <input type="text" class="form-control" id="billing-country-code" placeholder="XX">
+                        <span id="help-billing-country-code" class="help-block"></span>
+                    </div>
 
                     <div class="bt-drop-in-wrapper">
                         <div id="bt-dropin"></div>
@@ -73,6 +128,13 @@
         braintree.dropin.create({
           authorization: client_token,
           selector: '#bt-dropin',
+          locale: 'en_US', // 加这个可以让paypal的“结账”文字变成英文
+          threeDSecure: true, // 开启这个可以验证用户输入的信用卡地址
+          card: {
+            cardholderName: {
+              required: true
+            },
+          },
           paypal: {
             flow: 'vault'
           }
@@ -83,10 +145,28 @@
           }
           form.addEventListener('submit', function (event) {
             event.preventDefault();
+              var threeDSecureParameters = {
+                  amount: document.querySelector('#amount').value,
+                  email: document.querySelector('#email').value,
+                  billingAddress: {
+                      givenName: document.querySelector('#billing-given-name').value, // ASCII-printable characters required, else will throw a validation error
+                      surname: document.querySelector('#billing-surname').value, // ASCII-printable characters required, else will throw a validation error
+                      phoneNumber: document.querySelector('#billing-phone').value,
+                      streetAddress: document.querySelector('#billing-street-address').value,
+                      extendedAddress: document.querySelector('#billing-extended-address').value,
+                      locality: document.querySelector('#billing-locality').value,
+                      region: document.querySelector('#billing-region').value,
+                      postalCode: document.querySelector('#billing-postal-code').value,
+                      countryCodeAlpha2: document.querySelector('#billing-country-code').value
+                  },
+              };
 
-            instance.requestPaymentMethod(function (err, payload) {
+              instance.requestPaymentMethod({
+                threeDSecure: threeDSecureParameters
+            }, function (err, payload) {
               if (err) {
                 console.log('Request Payment Method Error', err);
+                alert(err)
                 return;
               }
 
